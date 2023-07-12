@@ -8,6 +8,7 @@ import aupet.microclimate.web.GenericResponse;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import lombok.extern.log4j.Log4j2;
 import lombok.val;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @RequiredArgsConstructor
+@Log4j2
 public class ClimateService implements IClimateService {
 
     private final ClimateRepository climateRepository;
