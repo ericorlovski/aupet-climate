@@ -21,7 +21,7 @@ public class ClimateService implements IClimateService {
 
     private final ClimateRepository climateRepository;
 
-    public GenericResponse<String> pushClimateTable(ClimateDto dto) { //Метод занесения нового заказа от Тикетона
+    public GenericResponse<String> pushClimateTable(ClimateDto dto) {
 
         val climate = new Climate();
 
