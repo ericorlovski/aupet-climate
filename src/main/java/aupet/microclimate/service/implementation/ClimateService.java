@@ -34,7 +34,7 @@ public class ClimateService implements IClimateService {
         climateRepository.save(climate);
 
         try {
-            return new GenericResponse<>("done");
+            return new GenericResponse<>("Climate control has been successfully entered into the database");
         } catch (Exception e) {
             return GenericResponse.error(1, e.getMessage());
         }
