@@ -1,13 +1,12 @@
 package aupet.microclimate.model.entity;
 
+import aupet.microclimate.enums.ClimateStatusType;
 import aupet.microclimate.model.entity.common.BasicTimedEntityLarge;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
@@ -23,7 +22,8 @@ public class Climate extends BasicTimedEntityLarge {
     private LocalDateTime date;
 
     @Column(name = "status")
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private ClimateStatusType status;
 
     @Column(name = "active")
     private boolean active = true;

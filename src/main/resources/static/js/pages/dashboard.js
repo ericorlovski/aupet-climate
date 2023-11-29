@@ -106,6 +106,39 @@ $(function () {
     inline: true
   })
 
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      datasets: [{
+        label: place,
+        data: placeData,
+        borderColor: getStatusColor(placeData[0].y),
+        fill: false,
+      }]
+    },
+    options: {
+      scales: {
+        x: {
+          type: 'time',
+          time: {
+            parser: 'YYYY-MM-DDTHH:mm:ss.SSSSSS',
+            tooltipFormat: 'YYYY-MM-DDTHH:mm:ss.SSSSSS',
+          },
+          title: {
+            display: true,
+            text: 'Date'
+          }
+        },
+        y: {
+          title: {
+            display: true,
+            text: 'Status'
+          }
+        }
+      }
+    }
+  });
+
   // SLIMSCROLL FOR CHAT WIDGET
   $('#chat-box').overlayScrollbars({
     height: '250px'

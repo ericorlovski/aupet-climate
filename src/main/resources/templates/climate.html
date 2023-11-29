@@ -212,11 +212,11 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>AUPET FORM</h1>
+            <h1>AUPET CLIMATE</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="/climate/">Микроклимат</a></li>
+              <li class="breadcrumb-item"><a href="/climate/">Качество воздуха</a></li>
             </ol>
           </div>
         </div>
@@ -260,6 +260,8 @@
                   </tr>
                   </tbody>
                 </table>
+                <div id="statusChart"></div>
+
               </div>
               <!-- /.card-body -->
             </div>
@@ -292,7 +294,7 @@
 <script src="/plugins/jquery/jquery.min.js"></script>
 <!-- Bootstrap 4 -->
 <script src="/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-<!-- DataTables  & Plugins -->
+<!-- DataTables & Plugins -->
 <script src="/plugins/datatables/jquery.dataTables.min.js"></script>
 <script src="/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
 <script src="/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
@@ -305,15 +307,17 @@
 <script src="/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
 <script src="/plugins/datatables-buttons/js/buttons.print.min.js"></script>
 <script src="/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+<!-- Plotly.js -->
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 <!-- AdminLTE App -->
 <script src="/js/adminlte.min.js"></script>
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <!-- Page specific script -->
 <script>
   $(function () {
-    $("#example1").DataTable({
-      "responsive": true, "lengthChange": false, "autoWidth": false,
-      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+    // DataTables initialization code (replace this with your actual DataTables initialization)
     $('#example2').DataTable({
       "paging": true,
       "lengthChange": false,
@@ -323,6 +327,74 @@
       "autoWidth": false,
       "responsive": true,
     });
+
+    // Получите уникальные места
+    var uniquePlaces = [...new Set($('#example2 tbody tr td:first-child').map(function () {
+      return $(this).text();
+    }).get())];
+
+    // Создайте графики для каждого места
+    uniquePlaces.forEach(function (place) {
+      var placeData = [];
+
+      $('#example2 tbody tr').each(function () {
+        var rowPlace = $(this).find('td:eq(0)').text();
+        var status = $(this).find('td:eq(2)').text().toLowerCase();
+        var date = $(this).find('td:eq(1)').text();
+
+        if (rowPlace === place) {
+          var dataPoint = {
+            x: date,
+            y: status
+          };
+          placeData.push(dataPoint);
+        }
+      });
+
+      // Сортируйте данные по дате
+      placeData.sort((a, b) => new Date(a.x) - new Date(b.x));
+
+      // Постройте график с использованием Plotly
+      var trace = {
+        x: placeData.map(data => data.x),
+        y: placeData.map(data => data.y),
+        type: 'scatter',
+        mode: 'lines',
+        name: place,
+        line: {
+          color: getStatusColor(status)
+        },
+        hovertemplate: '%{y}<extra></extra>'
+      };
+
+      var layout = {
+        title: 'Air quality over time in classrooms',
+        xaxis: {
+          title: 'Date'
+        },
+        yaxis: {
+          title: 'Status',
+          categoryorder: 'array',
+          categoryarray: ['low', 'moderate', 'high']
+        }
+      };
+
+      Plotly.newPlot('statusChart', [trace], layout);
+    });
+
+    // Вспомогательная функция для получения цвета статуса
+    function getStatusColor(status) {
+      switch (status) {
+        case 'low':
+          return '#28a745'; // Green for 'low'
+        case 'moderate':
+          return '#ffc107'; // Yellow for 'moderate'
+        case 'high':
+          return '#dc3545'; // Red for 'high'
+        default:
+          return '#000000';
+      }
+    }
   });
 </script>
 </body>

@@ -32,9 +32,12 @@ api:
   log:
     request: 'false'
 springdoc:
+  api-docs:
+    enabled: true
   swagger-ui:
+    enabled: true
     path: /api/v1/swagger/swagger-ui.html
-    default-models-expand-depth: '-1'
+  pathsToMatch: /api/**
 service:
   cors:
     allowed-origins: http://localhost, http://test-api:80010

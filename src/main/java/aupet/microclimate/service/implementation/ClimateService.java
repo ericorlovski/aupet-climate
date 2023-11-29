@@ -1,5 +1,6 @@
 package aupet.microclimate.service.implementation;
 
+import aupet.microclimate.enums.ClimateStatusType;
 import aupet.microclimate.model.dto.ClimateDto;
 import aupet.microclimate.model.entity.Climate;
 import aupet.microclimate.model.repository.ClimateRepository;
@@ -15,8 +16,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 
 @Service
-@Getter
-@Setter
 @RequiredArgsConstructor
 @Log4j2
 public class ClimateService implements IClimateService {
@@ -29,7 +28,7 @@ public class ClimateService implements IClimateService {
 
         climate.setPlace(dto.getPlace());
         climate.setDate(LocalDateTime.now());
-        climate.setStatus("COOL");
+        climate.setStatus(ClimateStatusType.HIGH);
 
         climateRepository.save(climate);
 
