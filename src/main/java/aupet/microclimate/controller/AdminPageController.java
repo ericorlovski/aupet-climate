@@ -18,7 +18,7 @@ public class AdminPageController {
     private final HumTempRepository climateRepository;
     @GetMapping(value = "/")
     public ModelAndView getAdminPage(Model model) {
-        val entity = climateRepository.getAllClimateList();
+        val entity = climateRepository.findAll();
 
         model.addAttribute("climate", entity);
         model.addAttribute("formErrors", 0);

@@ -216,7 +216,7 @@
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="/climate/">Качество воздуха</a></li>
+              <li class="breadcrumb-item"><a href="/climate/">Влажность и температура</a></li>
             </ol>
           </div>
         </div>
@@ -238,6 +238,9 @@
                   <thead >
                   <tr>
                     <td>
+                      ID
+                    </td>
+                    <td>
                       PLACE
                     </td>
                     <td>
@@ -253,6 +256,7 @@
                   </thead>
                   <tbody>
                   <tr th:each="cat: ${model.climate}" class="bg-gradient-blue text-white">
+                    <td th:text="${cat.id}"/>
                     <td th:text="${cat.place}"/>
                     <td th:text="${cat.date}"/>
                     <td th:text="${cat.status}"/>
@@ -328,59 +332,44 @@
       "responsive": true,
     });
 
-    // Получите уникальные места
-    var uniquePlaces = [...new Set($('#example2 tbody tr td:first-child').map(function () {
-      return $(this).text();
-    }).get())];
+    // Получите данные DataTables
+    var dataTable = $('#example2').DataTable();
 
-    // Создайте графики для каждого места
-    uniquePlaces.forEach(function (place) {
-      var placeData = [];
-
-      $('#example2 tbody tr').each(function () {
-        var rowPlace = $(this).find('td:eq(0)').text();
-        var status = $(this).find('td:eq(2)').text().toLowerCase();
-        var date = $(this).find('td:eq(1)').text();
-
-        if (rowPlace === place) {
-          var dataPoint = {
-            x: date,
-            y: status
-          };
-          placeData.push(dataPoint);
-        }
-      });
-
-      // Сортируйте данные по дате
-      placeData.sort((a, b) => new Date(a.x) - new Date(b.x));
-
-      // Постройте график с использованием Plotly
-      var trace = {
-        x: placeData.map(data => data.x),
-        y: placeData.map(data => data.y),
-        type: 'scatter',
-        mode: 'lines',
-        name: place,
-        line: {
-          color: getStatusColor(status)
-        },
-        hovertemplate: '%{y}<extra></extra>'
+// Получите все данные из столбцов "DATE" и "STATUS"
+    var chartData = dataTable.rows().data().toArray().map(function(row) {
+      return {
+        x: row[2],  // Индекс столбца "DATE"
+        y: row[3].toLowerCase()  // Индекс столбца "STATUS"
       };
-
-      var layout = {
-        title: 'Air quality over time in classrooms',
-        xaxis: {
-          title: 'Date'
-        },
-        yaxis: {
-          title: 'Status',
-          categoryorder: 'array',
-          categoryarray: ['low', 'moderate', 'high']
-        }
-      };
-
-      Plotly.newPlot('statusChart', [trace], layout);
     });
+
+// Сортируйте данные по дате в обратном порядке
+    chartData.sort((a, b) => new Date(b.x) - new Date(a.x));
+    // Постройте график с использованием Plotly
+    var trace = {
+      x: chartData.map(data => data.x),
+      y: chartData.map(data => data.y),
+      type: 'scatter',
+      mode: 'lines',
+      line: {
+        color: getStatusColor(status)
+      },
+      hovertemplate: '%{y}<extra></extra>'
+    };
+
+    var layout = {
+      title: 'AIR QUALITY',
+      xaxis: {
+        title: 'Date'
+      },
+      yaxis: {
+        title: 'Status',
+        categoryorder: 'array',
+        categoryarray: ['low', 'average', 'high']
+      }
+    };
+
+    Plotly.newPlot('statusChart', [trace], layout);
 
     // Вспомогательная функция для получения цвета статуса
     function getStatusColor(status) {
