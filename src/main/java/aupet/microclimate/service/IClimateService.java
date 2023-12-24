@@ -1,8 +1,8 @@
 package aupet.microclimate.service;
 
-import aupet.microclimate.model.dto.ClimateDto;
+import aupet.microclimate.model.dto.HumTempDto;
 import aupet.microclimate.web.GenericResponse;
 
 public interface IClimateService {
-    GenericResponse<String> pushClimateTable(ClimateDto dto);
+    GenericResponse<Boolean> pushHumTemp(HumTempDto dto);
 }

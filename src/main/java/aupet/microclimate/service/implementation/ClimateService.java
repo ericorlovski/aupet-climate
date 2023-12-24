@@ -1,14 +1,13 @@
 package aupet.microclimate.service.implementation;
 
-import aupet.microclimate.enums.ClimateStatusType;
-import aupet.microclimate.model.dto.ClimateDto;
-import aupet.microclimate.model.entity.Climate;
-import aupet.microclimate.model.repository.ClimateRepository;
+import aupet.microclimate.model.enums.ClimateStatusType;
+import aupet.microclimate.model.dto.HumTempDto;
+import aupet.microclimate.model.entity.HumTemp;
+import aupet.microclimate.model.enums.StandartCode;
+import aupet.microclimate.model.repository.HumTempRepository;
 import aupet.microclimate.service.IClimateService;
 import aupet.microclimate.web.GenericResponse;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 import lombok.val;
 import org.springframework.stereotype.Service;
@@ -20,22 +19,33 @@ import java.time.LocalDateTime;
 @Log4j2
 public class ClimateService implements IClimateService {
 
-    private final ClimateRepository climateRepository;
+    private final HumTempRepository humTempRepository;
 
-    public GenericResponse<String> pushClimateTable(ClimateDto dto) {
+    @Override
+    public GenericResponse<Boolean> pushHumTemp(HumTempDto dto) {
 
-        val climate = new Climate();
+        return new GenericResponse<>(pushClimateTable(dto.getPlace(), dto.getTemperature(), dto.getHumidity()));
+    }
 
-        climate.setPlace(dto.getPlace());
-        climate.setDate(LocalDateTime.now());
-        climate.setStatus(ClimateStatusType.HIGH);
+    private Boolean pushClimateTable(String place, Integer temperature, Integer humidity) {
 
-        climateRepository.save(climate);
+        val humTemp = new HumTemp();
 
-        try {
-            return new GenericResponse<>("Climate control has been successfully entered into the database");
-        } catch (Exception e) {
-            return GenericResponse.error(1, e.getMessage());
+        humTemp.setPlace(place);
+        humTemp.setDate(LocalDateTime.now());
+        humTemp.setHumidity(String.valueOf(humidity));
+        humTemp.setTemperature(String.valueOf(temperature));
+        humTemp.setStatus(ClimateStatusType.AVERAGE);
+
+        if (temperature > StandartCode.TEMPERATURE_STAND.getCode() && humidity > StandartCode.HUMIDITY_STAND.getCode()) {
+            humTemp.setStatus(ClimateStatusType.HIGH);
+        } else if (temperature < StandartCode.TEMPERATURE_STAND.getCode() && humidity < StandartCode.HUMIDITY_STAND.getCode()) {
+            humTemp.setStatus(ClimateStatusType.LOW);
         }
+
+        log.info("Humidity data: {}, temperature data: {}, in place: {}", humidity, temperature, place);
+
+        humTempRepository.save(humTemp);
+        return true;
     }
 }

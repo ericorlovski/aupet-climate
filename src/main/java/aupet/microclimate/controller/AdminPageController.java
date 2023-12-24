@@ -1,6 +1,6 @@
 package aupet.microclimate.controller;
 
-import aupet.microclimate.model.repository.ClimateRepository;
+import aupet.microclimate.model.repository.HumTempRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.springframework.stereotype.Controller;
@@ -15,7 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 @RequiredArgsConstructor
 public class AdminPageController {
 
-    private final ClimateRepository climateRepository;
+    private final HumTempRepository climateRepository;
     @GetMapping(value = "/")
     public ModelAndView getAdminPage(Model model) {
         val entity = climateRepository.getAllClimateList();

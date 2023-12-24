@@ -1,6 +1,7 @@
 package aupet.microclimate.controller;
 
 import aupet.microclimate.model.dto.ClimateDto;
+import aupet.microclimate.model.dto.HumTempDto;
 import aupet.microclimate.service.IClimateService;
 import aupet.microclimate.web.GenericResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -21,11 +22,11 @@ public class ClimateController {
             summary = "Endpoint for saving climate details",
             description = "Retrieving and saving climate details for the AUPET application"
     )
-    @RequestMapping(value = "/set-climate-details", method = RequestMethod.POST)
-    public GenericResponse<String> climateDetails(@RequestBody @Valid ClimateDto dto) {
+    @RequestMapping(value = "/set-hum-temp-details", method = RequestMethod.POST)
+    public GenericResponse<Boolean> climateDetails(@RequestBody @Valid HumTempDto dto) {
 
         try {
-            return climateService.pushClimateTable(dto);
+            return climateService.pushHumTemp(dto);
         } catch (Exception exc) {
             return GenericResponse.error(1, exc.getMessage());
         }
