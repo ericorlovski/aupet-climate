@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Admin page climate</title>
+  <title>AUES climate</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -212,7 +212,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>AUPET CLIMATE</h1>
+            <h1>AUES</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -237,19 +237,25 @@
                 <table id="example2" class="table table-bordered">
                   <thead >
                   <tr>
-                    <td>
+                    <td class="text-center">
                       ID
                     </td>
-                    <td>
+                    <td class="text-center">
                       PLACE
                     </td>
-                    <td>
+                    <td class="text-center">
                       DATE
                     </td>
-                    <td>
+                    <td class="text-center">
                       STATUS
                     </td>
-                    <td>
+                    <td class="text-center">
+                      HUMIDITY (%)
+                    </td>
+                    <td class="text-center">
+                      TEMPERATURE (ºC)
+                    </td>
+                    <td class="text-center">
                       ACTIVE
                     </td>
                   </tr>
@@ -260,7 +266,19 @@
                     <td th:text="${cat.place}"/>
                     <td th:text="${cat.date}"/>
                     <td th:text="${cat.status}"/>
-                    <td th:text="${cat.active}"/>
+                    <td th:text="${cat.humidity}"/>
+                    <td th:text="${cat.temperature}"/>
+                    <td class="text-center align-middle">
+                      <a th:href="|/climate/toggle_climate/${cat.id}|" title="Выключить"
+                         th:if="${cat.active}" class="deactivate" style="color: #fff" ;
+                         th:data-id="${cat.id}" th:id="|activate-${cat.id}|"><i
+                              class="fa fa-2x fa-check-circle"></i></a>
+                      <a th:href="|/climate/toggle_climate/${cat.id}|" title="Включить"
+                         th:unless="${cat.active}" class="activate"
+                         style="color: rgba(255,47,13,0.43)" ;
+                         th:data-id="${cat.id}" th:id="|activate-${cat.id}|"><i
+                              class="fa fa-2x fa-times-circle"></i></a>
+                    </td>
                   </tr>
                   </tbody>
                 </table>
@@ -335,7 +353,7 @@
     // Получите данные DataTables
     var dataTable = $('#example2').DataTable();
 
-// Получите все данные из столбцов "DATE" и "STATUS"
+    // Получите все данные из столбцов "DATE" и "STATUS"
     var chartData = dataTable.rows().data().toArray().map(function(row) {
       return {
         x: row[2],  // Индекс столбца "DATE"
