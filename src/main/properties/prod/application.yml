@@ -1,0 +1,42 @@
+server:
+  port: ${SERVICE_PORT:8002}
+management:
+  security:
+    enabled: 'true'
+  endpoints:
+    web:
+      exposure:
+        include: health, info, env
+spring:
+  liquibase:
+    change-log: classpath:db/db.changelog-master.xml
+    password: ${DB_PASSWORD:1475953tima}
+    enabled: 'true'
+    user: ${DB_USERNAME:postgres}
+  datasource:
+    password: ${DB_PASSWORD:1475953tima}
+    username: ${DB_USERNAME:postgres}
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/bcc?currentSchema=aupet_climate
+  jpa:
+    properties:
+      hibernate:
+        format_sql: 'true'
+        show_sql: 'false'
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://${AUTH_URI:localhost}:${AUTH_PORT:8001}
+debug: 'false'
+api:
+  log:
+    request: 'false'
+springdoc:
+  swagger-ui:
+    path: /api/v1/swagger/swagger-ui.html
+    default-models-expand-depth: '-1'
+service:
+  cors:
+    allowed-origins: http://localhost, http://test-api:80010
+  actuator:
+    password: ${ACTUATOR_PASSWORD:password}
