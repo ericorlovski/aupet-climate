@@ -23,7 +23,6 @@ public class ClimateService implements IClimateService {
 
     @Override
     public GenericResponse<Boolean> pushHumTemp(HumTempDto dto) {
-
         return new GenericResponse<>(pushClimateTable(dto.getPlace(), dto.getTemperature(), dto.getHumidity()));
     }
 
