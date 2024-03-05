@@ -3,12 +3,13 @@ package aupet.microclimate.model.dto;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Data
 public class HumTempDto {
-    @NotBlank
+    @NotNull
     private Integer temperature;
-    @NotBlank
+    @NotNull
     private Integer humidity;
     @NotBlank
     private String place;
