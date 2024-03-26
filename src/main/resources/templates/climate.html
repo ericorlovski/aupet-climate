@@ -356,13 +356,14 @@
     // Получите все данные из столбцов "DATE" и "STATUS"
     var chartData = dataTable.rows().data().toArray().map(function(row) {
       return {
-        x: row[2],  // Индекс столбца "DATE"
+        x: new Date(row[2]),  // Преобразуем строку с датой и временем в объект Date
         y: row[3].toLowerCase()  // Индекс столбца "STATUS"
       };
     });
 
-// Сортируйте данные по дате в обратном порядке
-    chartData.sort((a, b) => new Date(b.x) - new Date(a.x));
+    // Сортируйте данные по дате в обратном порядке
+    chartData.sort((a, b) => b.x - a.x);
+
     // Постройте график с использованием Plotly
     var trace = {
       x: chartData.map(data => data.x),
@@ -378,7 +379,7 @@
     var layout = {
       title: 'AIR QUALITY',
       xaxis: {
-        title: 'Date'
+        title: 'Date and Time'  // Изменено на "Date and Time"
       },
       yaxis: {
         title: 'Status',

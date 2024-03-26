@@ -5,13 +5,13 @@ public enum StandartCode {
     TEMPERATURE_STAND(19),
 
     ;
-    private final int code;
+    private final double code;
 
-    StandartCode(int code) {
+    StandartCode(double code) {
         this.code = code;
     }
 
-    public int getCode() {
+    public double getCode() {
         return code;
     }
 }
