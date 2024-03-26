@@ -43,3 +43,6 @@ service:
     allowed-origins: http://localhost, http://test-api:80010
   actuator:
     password: ${ACTUATOR_PASSWORD:password}
+  google:
+    sheet: 1Xg8LXnwxw6_psb8iIvmVJOf3Svg6zD4_f2EEZKtr6gk
+    url: https://docs.google.com/spreadsheets/d/%s/export?format=csv&gid=%s&range=%s

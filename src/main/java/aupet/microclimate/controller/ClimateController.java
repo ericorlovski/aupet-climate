@@ -1,6 +1,5 @@
 package aupet.microclimate.controller;
 
-import aupet.microclimate.model.dto.ClimateDto;
 import aupet.microclimate.model.dto.HumTempDto;
 import aupet.microclimate.service.IClimateService;
 import aupet.microclimate.web.GenericResponse;

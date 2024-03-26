@@ -1,8 +1,7 @@
 package aupet.microclimate.controller;
 
-import aupet.microclimate.model.repository.HumTempRepository;
+import aupet.microclimate.service.IAdminService;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -17,12 +16,11 @@ import org.springframework.web.servlet.ModelAndView;
 @RequiredArgsConstructor
 public class AdminPageController {
 
-    private final HumTempRepository humTempRepository;
+    private final IAdminService adminService;
+
     @GetMapping(value = "/")
     public ModelAndView getAdminPage(Model model) {
-        val entity = humTempRepository.findAll();
-
-        model.addAttribute("climate", entity);
+        model.addAttribute("climate", adminService.getAllHunTempActive());
         model.addAttribute("formErrors", 0);
 
         return new ModelAndView("climate","model", model);
@@ -31,8 +29,7 @@ public class AdminPageController {
     @GetMapping(value = "/toggle_climate/{id}")
     @Transactional(rollbackFor = Exception.class)
     public ModelAndView toggleCategoryActivity(@PathVariable Long id) {
-        val cat = humTempRepository.findById(id);
-        cat.ifPresent(food -> food.setActive(!food.isActive()));
+        adminService.toggleClimateActivity(id);
         return new ModelAndView("redirect:/climate/");
     }
 }

@@ -8,8 +8,8 @@ import java.util.List;
 
 public interface HumTempRepository extends JpaRepository<HumTemp, Long> {
 
-    @Query(
-            value = "SELECT * FROM climate c",
-            nativeQuery = true)
-    List<HumTemp> getAllClimateList();
+    @Query("SELECT COUNT(c) FROM HumTemp c")
+    Integer getClimateCount();
+
+    List<HumTemp> getAllByActive(boolean active);
 }

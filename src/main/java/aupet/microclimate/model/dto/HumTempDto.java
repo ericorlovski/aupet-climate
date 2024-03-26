@@ -8,9 +8,9 @@ import javax.validation.constraints.NotNull;
 @Data
 public class HumTempDto {
     @NotNull
-    private Integer temperature;
+    private double temperature;
     @NotNull
-    private Integer humidity;
+    private double humidity;
     @NotBlank
     private String place;
 }
