@@ -65,10 +65,15 @@ public class ClimateService implements IClimateService {
     public void readDataFromGoogleSheet() {
 
         int countA = humTempRepository.getClimateCount();
-        String range = String.format("A%d:B%d", countA, countA);
+        if (countA == 0 || countA == 1) {
+            countA = 2;
+            deactivateFirstLabel();
+        } else if (countA == 2) {
+            deactivateFirstLabel();
+        }
 
-        String gid = "0";
-        String url = String.format(googleUrl, googleSheet, gid, range);
+        String range = String.format("A%d:B%d", countA, countA);
+        String url = String.format(googleUrl, googleSheet, "0", range);
 
         try (CSVParser parser = CSVParser.parse(new URL(url), StandardCharsets.UTF_8, CSVFormat.DEFAULT)) {
             for (CSVRecord csvRecord : parser) {
@@ -79,6 +84,15 @@ public class ClimateService implements IClimateService {
             }
         } catch (Exception e) {
             log.error("Ошибка при чтении данных из Google Таблицы: " + e.getMessage());
+        }
+    }
+
+    private void deactivateFirstLabel() {
+        val climateList = humTempRepository.getAllByActive(true);
+
+        for (HumTemp humTemp : climateList) {
+            humTemp.setActive(false);
+            humTempRepository.save(humTemp);
         }
     }
 
